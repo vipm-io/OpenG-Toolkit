@@ -71,10 +71,26 @@ At the top level are the following important files and folders:
 > See the [Project (on-disk) Folder and File Structure](#project-on-disk-files-and-folders) for details on what individual files and folders on disk are used for.
 
 ## Project Development
-[todo]
+
+A good workflow would be:
+- Create an issue on Github
+- Create a branch for this issue
+- Make changes to the source
+- Create a pull request from the branch
 
 ### Creating a Branch in Git
-[todo]
+
+On Github go to the issue you want work on and on the right side of the page you can create a branch for this issue. 
+
+![Create Branch](CreateBranch.png)
+
+### Linking a Branch to other issue
+
+If you want to work on multiple issues in the same branch you have the option to link a branch to other issues.
+
+Go to the new issue on Github and select on the right side the gear icon next to the development header. Here you can select the brnach you are currently working in.
+
+![Relink Branch to another issue](LinkBranch.png)
 
 ### Creating Unit Tests with Caraya
 
