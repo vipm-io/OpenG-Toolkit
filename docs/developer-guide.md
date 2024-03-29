@@ -78,6 +78,7 @@ When working on OpenG repositories the correct workflow would be:
 - Create a branch for this issue
 - Clone the repository 
 - Make changes to the source
+- Commit changes and link your issue to this commit
 - Create a pull request from the branch
 
 ### Creating a Branch in Git
@@ -94,6 +95,19 @@ If you want to work on multiple issues in the same branch you have the option to
 Go to the new issue on Github and select on the right side the gear icon next to the development header. Here you can select the brnach you are currently working in.
 
 ![Relink Branch to another issue](LinkBranch.png)
+
+### Link Issue To Commit
+
+If you use the correct format in your commit message, your commit will be automatically linked to a GitHub Issue. To do this, put a # followed the Issue number. This will automatically create a link in the commit message.
+
+For example if you made a commit to repo and wrote the folllowing commit message:
+
+> Fix bug #1337
+
+this gets automatically converted to:
+
+> Fix bug [#1337](github.com/vipm-io/OpenG-Tookit/issues/3)
+
 
 ### Creating Unit Tests with Caraya
 
