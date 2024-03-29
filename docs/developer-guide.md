@@ -106,7 +106,7 @@ For example if you made a commit to repo and wrote the folllowing commit message
 
 this gets automatically converted to:
 
-> Fix bug [#1337](github.com/vipm-io/OpenG-Tookit/issues/3)
+> Fix bug [#1337](https://www.github.com/vipm-io/OpenG-Tookit/issues/3)
 
 
 ### Creating Unit Tests with Caraya
