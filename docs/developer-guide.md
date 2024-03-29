@@ -72,9 +72,11 @@ At the top level are the following important files and folders:
 
 ## Project Development
 
-A good workflow would be:
+When working on OpenG repositories the correct workflow would be:
+- Fork the repository
 - Create an issue on Github
 - Create a branch for this issue
+- Clone the repository 
 - Make changes to the source
 - Create a pull request from the branch
 
@@ -83,6 +85,7 @@ A good workflow would be:
 On Github go to the issue you want work on and on the right side of the page you can create a branch for this issue. 
 
 ![Create Branch](CreateBranch.png)
+
 
 ### Linking a Branch to other issue
 
