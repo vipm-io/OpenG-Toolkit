@@ -8,6 +8,8 @@ from dataclasses import dataclass
 import xmltodict
 from pydantic import BaseModel, Field
 
+LV_VERSION = "20.0"
+
 # get this scripts folder
 script_folder = Path(__file__).parent
 project_folder = script_folder.parent.parent
@@ -252,6 +254,19 @@ def main():
 
             with open(readme, "a") as file:
                 file.write(README_CONTRIBUTORS_SECTION)
+
+    ##########################################################################################
+    # Check for .lvversion file
+    ##########################################################################################
+
+    dot_lvversion = project_folder / ".lvversion"
+    if not dot_lvversion.exists():
+        print(
+            f"{ascii_warning} .lvversion file not found in project root. Creating one..."
+        )
+        with open(dot_lvversion, "w") as file:
+            file.write(LV_VERSION)
+        print(f"{ascii_checkmark} .lvversion file created and set to '{LV_VERSION}'.")
 
     ##########################################################################################
     # Cleanup
