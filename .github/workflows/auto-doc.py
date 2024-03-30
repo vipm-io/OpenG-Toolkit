@@ -81,8 +81,8 @@ def main():
     if all_contributorsrc.exists():
         print(f"{ascii_checkmark} .all-contributorsrc file found in project root.")
     else:
-        print("{ascii_cross} .all-contributorsrc file not found in project root. Creating one...")
-        create_all_contributorsrc(gh_project)
+        print(f"{ascii_cross} .all-contributorsrc file not found in project root. Creating one...")
+        create_all_contributorsrc(file_path=all_contributorsrc, gh_project=gh_project)
 
     print("\nChecking README.md for `## Contributors` section...")
     readme = project_folder / "README.md"
