@@ -30,7 +30,8 @@ jobs:
           ref: 'main'
           path: '.github/workflows'
           sparse-checkout: |
-            .github/workflows
+            .github/workflows/auto-doc.py
+          sparse-checkout-cone-mode: false
 
       - name: Run auto-doc.py
         run: python .github/workflows/auto-doc.py
