@@ -19,6 +19,8 @@ Contributor Tasks
     - [ ] Re-scan for dependencies to make sure they are updated
     - [ ] Review dependencies to see if they are needed/accurate
 - [ ] Unit Tests
+  - [ ] Copy over the 'build support' folder from OpenG Variant
+  - [ ] Remove the .vit test templates
   - [ ] Upgrade unit tests to use Caraya (optional, since could be done later)
 
 
