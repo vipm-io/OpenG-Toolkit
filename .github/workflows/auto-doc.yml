@@ -1,0 +1,49 @@
+name: auto-doc
+
+on:
+  workflow_call:
+    # inputs:
+    #   labview-version:
+    #     required: false
+    #     default: "20.0"
+    #     type: string
+
+jobs:
+
+  doc-checks:
+
+    name: Documentation Checks
+    
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          # cache: 'pip'
+          
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'vipm-io/OpenG-Toolkit'
+          ref: 'main'
+          path: '.github/workflows'
+          sparse-checkout: |
+            .github/workflows
+
+      - name: Run auto-doc.py
+        run: python .github/workflows/auto-doc.py
+
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_prefix: "[AUTO-DOC]"
+
+      - name: Create pull request
+        uses: devops-infra/action-pull-request@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: "**Automated pull request**<br><br>Documentation has been updated automatically."
+          title: ${{ github.event.commits[0].message }}
