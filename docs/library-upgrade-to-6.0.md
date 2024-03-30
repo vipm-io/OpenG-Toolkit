@@ -1,5 +1,9 @@
 # Guide for Upgrading Library Sources for OpenG 6.0 Release
 
+## Checklist (Copy everything below into a new issue in the library/project called "6.0 Tasks")
+
+This was copied from [List Template Here](https://github.com/vipm-io/OpenG-Toolkit/blob/main/docs/library-upgrade-to-6.0.md). Please update the template when changes/additions to this list are needed.
+
 Contributor Tasks
 - [ ] LabVIEW tasks
   - [ ] Upgrade Sources to LV2020 (CI will fail until this is done)
@@ -29,6 +33,12 @@ Admin Tasks (to be done by Maintainer)
   - [ ] Add `.github/workflows/ci.yml` (copy from OpenG Variant Library) to project (this will help automate and enforce maintenance)
 - [ ] Release
   - [ ] Update .vipb file with release notes
+  - [ ] Assign all issues and PRs to the milestone
+  - [ ] Create a Release with `v6.0.0` tag and name
+    - [ ] Generate Release notes
+  - [ ] Upload package to vipm.io
+
+## Admin To Do
 
 Auto-doc updates needed for automation/validation (Affects all OpenG Packages)
 - [ ] Check for VIs in an `.lvlib` (check for presence of lvlib in correct location)
