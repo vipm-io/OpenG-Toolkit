@@ -6,16 +6,19 @@ Steps to Upgrade Sources
 - [ ] Upgrade Sources to LV2020 (CI will fail until this is done)
 - [ ] Separate Compiled Code for all files (CI will fail until this is done)
 - [ ] Move VIs into a `.lvlib`
-- [ ] Update .vipb file with release notes
-- [ ] Update .vipb file with Copyright notice
+- [ ] Update License to mention "Project Contributors (See README.md)"
+- [ ] Change .vipb package version to `6.0.0`
+- [ ] Update .vipb file with Copyright notice and mention "Project Contributors (See README.md)"
 - [ ] Update .vipb file with Author Info (VIPM Community)
-- [ ] Update License to mention Project Contributors
 - [ ] Create a `LICENSE` file in the root directory (copy from user docs folder)
+
+And, before release:
+
+- [ ] Update .vipb file with release notes
 
 Additional tasks
 
 - [ ] Upgrade unit tests to use Caraya
-
 
 Auto-doc updates needed:
 
