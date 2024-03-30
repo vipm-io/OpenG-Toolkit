@@ -28,7 +28,7 @@ jobs:
         with:
           repository: 'vipm-io/OpenG-Toolkit'
           ref: 'main'
-          path: '.github/workflows'
+          # path: '.github/workflows'
           sparse-checkout: |
             .github/workflows/auto-doc.py
           sparse-checkout-cone-mode: false
