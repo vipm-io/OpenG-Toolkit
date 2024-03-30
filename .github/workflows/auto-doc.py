@@ -2,6 +2,7 @@ from __future__ import annotations
 import os
 import json
 from pathlib import Path
+import re
 from typing import Self
 from dataclasses import dataclass
 
@@ -267,6 +268,18 @@ def main():
         with open(dot_lvversion, "w") as file:
             file.write(LV_VERSION)
         print(f"{ascii_checkmark} .lvversion file created and set to '{LV_VERSION}'.")
+
+    # also check for presense of a file named "LabVIEW 2009" (or similar) in the project root
+    # if it exists, then we'll delete it
+
+    labview_version_file_pattern = "LabVIEW [0-9]{4}"
+    re.compile(labview_version_file_pattern)
+    for file in project_folder.iterdir():
+        if re.match(labview_version_file_pattern, file.name):
+            print(
+                f"{ascii_warning} Found a LabVIEW version file '{file.name}' in project root. Deleting..."
+            )
+            file.unlink()
 
     ##########################################################################################
     # Cleanup
