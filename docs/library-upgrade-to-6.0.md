@@ -13,11 +13,11 @@ Contributor Tasks
   - [ ] Update .vipb file with Copyright notice and mention "Project Contributors (See README.md)"
   - [ ] Update .vipb file with Author Info (VIPM Community)
   - [ ] Change the .vipb's License Text file to link to the LICENSE in the root folder of project
-- [ ] Update .vipb/.vipc dependencies
-  - [ ] From the VI Package Builder, edit the VIPC file to update OpenG Toolkit dependencies to version 6.0
-  - [ ] Apply the new configuration, to upgrade all the packages
-  - [ ] Re-scan for dependencies to make sure they are updated
-  - [ ] Review dependencies to see if they are needed/accurate
+  - [ ] Update .vipb/.vipc dependencies
+    - [ ] From the VI Package Builder, edit the VIPC file to update OpenG Toolkit dependencies to version 6.0
+    - [ ] Apply the new configuration, to upgrade all the packages
+    - [ ] Re-scan for dependencies to make sure they are updated
+    - [ ] Review dependencies to see if they are needed/accurate
 - [ ] Unit Tests
   - [ ] Upgrade unit tests to use Caraya (optional, since could be done later)
 
