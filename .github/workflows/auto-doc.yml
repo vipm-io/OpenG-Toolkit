@@ -16,6 +16,10 @@ jobs:
     
     runs-on: ubuntu-latest
 
+    env:
+      AUTODOC_PY: .github/workflows/auto-doc.py
+      AUTODOC_DIR: .auto-doc
+
     steps:
 
       - uses: actions/checkout@v4
@@ -24,32 +28,34 @@ jobs:
         with:
           python-version: '3.11'
           # cache: 'pip'
-          
+
+
       - name: Checkout Auto-Doc
         uses: actions/checkout@v4
         with:
           repository: 'vipm-io/OpenG-Toolkit'
           ref: 'main'
-          path: '.github/workflows'
+          path: ${{env.AUTODOC_DIR}}
           sparse-checkout: |
-            .github/workflows/auto-doc.py
+            ${{env.AUTODOC_PY}}
           sparse-checkout-cone-mode: false
 
       - name: Run auto-doc.py
         run: |
-          wf=".github/workflows" && ad="auto-doc.py"
-          mv "$wf/$wf/$ad" $wf/
-          python $wf/$ad
+          mv "${AUTODOC_DIR}/${AUTODOC_PY}" $AUTODOC_PY
+          python $AUTODOC_PY
+          rm $AUTODOC_PY && rm -rf $AUTODOC_DIR
 
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_prefix: "[AUTO-DOC]"
+          target_branch: auto-doc-${{github.run_number}}
 
       - name: Create pull request
         uses: devops-infra/action-pull-request@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: "**Automated pull request**<br><br>Documentation has been updated automatically."
-          title: ${{ github.event.commits[0].message }}
+          title: auto-doc-${{github.run_number}}
