@@ -59,7 +59,7 @@ README_STRUCTURE = """
 
 README_TITLE_SECTION = """
 
-# {package_display_name} ![image](source/images/icon.png)
+# {package_display_name}
 
 [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=installs)](https://www.vipm.io/package/{package_name}/) [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=stars)](https://www.vipm.io/package/{package_name}/)
 [![ci-checks](https://github.com/{github_project_owner}/{github_project_name}/actions/workflows/ci.yml/badge.svg)](https://github.com/{github_project_owner}/{github_project_name}/actions/workflows/ci.yml)
@@ -91,7 +91,7 @@ README_HOW_TO_CONTRIBUTE_SECTION = """
 
 ## How to Contribute
 
-Take a look at the [Help Wanted](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) issues list. If it's your first contribution or you're not extremely familiar with this library, you might want to look at the [Good First Issues](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3Agood-first-issue) list.  If you see an issue that looks like one you can complete, add a comment to the issue stating you'd like to work on it, and a maintainer will follow up and "assigned" to you. You then create a branch and then submit your contribution in the form of a [Pull Requests](https://github.com/{github_project_owner}/{github_project_name}/pulls).
+Take a look at the [Help Wanted](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) issues list. If it's your first contribution or you're not extremely familiar with this library, you might want to look at the [Good First Issues](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3Agood+first+issue) list.  If you see an issue that looks like one you can complete, add a comment to the issue stating you'd like to work on it, and a maintainer will follow up and "assigned" to you. You then create a branch and then submit your contribution in the form of a [Pull Requests](https://github.com/{github_project_owner}/{github_project_name}/pulls).
 
 """
 
