@@ -1,9 +1,6 @@
 # Guide for Upgrading Library Sources for OpenG 6.0 Release
 
-Steps to Upgrade Sources
-
-- [ ] CI
-  - [ ] Add `.github/workflows/ci.yml` (copy from OpenG Variant Library) to project (this will help automate and enforce maintenance)
+Contributor Tasks
 - [ ] LabVIEW tasks
   - [ ] Upgrade Sources to LV2020 (CI will fail until this is done)
   - [ ] Separate Compiled Code for all files (CI will fail until this is done)
@@ -21,13 +18,17 @@ Steps to Upgrade Sources
   - [ ] Apply the new configuration, to upgrade all the packages
   - [ ] Re-scan for dependencies to make sure they are updated
   - [ ] Review dependencies to see if they are needed/accurate
-- [ ] Release
-  - [ ] Update .vipb file with release notes
 - [ ] Unit Tests
   - [ ] Upgrade unit tests to use Caraya (optional, since could be done later)
 
-Auto-doc updates needed:
 
+Admin Tasks (to be done by Maintainer)
+- [ ] CI
+  - [ ] Add `.github/workflows/ci.yml` (copy from OpenG Variant Library) to project (this will help automate and enforce maintenance)
+- [ ] Release
+  - [ ] Update .vipb file with release notes
+
+Auto-doc updates needed for automation/validation (Affects all OpenG Packages)
 - [ ] Check for VIs in an `.lvlib` (check for presence of lvlib in correct location)
 - [ ] Update .vipb file with Copyright notice (end date and "Project Contributors")
 - [ ] Update .vipb file with Author Info (VIPM Community)
