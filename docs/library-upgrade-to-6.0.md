@@ -23,10 +23,8 @@ Steps to Upgrade Sources
   - [ ] Review dependencies to see if they are needed/accurate
 - [ ] Release
   - [ ] Update .vipb file with release notes
-
-Additional tasks
-
-- [ ] Upgrade unit tests to use Caraya
+- [ ] Unit Tests
+  - [ ] Upgrade unit tests to use Caraya (optional, since could be done later)
 
 Auto-doc updates needed:
 
