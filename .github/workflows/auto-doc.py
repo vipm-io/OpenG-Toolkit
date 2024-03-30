@@ -58,17 +58,17 @@ README_STRUCTURE = """
 
 README_TITLE_SECTION = """
 
-# {package_display_name}
+# {package_display_name} ![image](source/images/icon.png)
 
 [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=installs)](https://www.vipm.io/package/{package_name}/) [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=stars)](https://www.vipm.io/package/{package_name}/)
 [![ci-checks](https://github.com/{github_project_owner}/{github_project_name}/actions/workflows/ci.yml/badge.svg)](https://github.com/{github_project_owner}/{github_project_name}/actions/workflows/ci.yml)
 [![All Contributors](https://img.shields.io/github/all-contributors/{github_project_owner}/{github_project_name}?color=ee8449&style=flat-square)](#contributors)
 
-![image](https://github.com/{github_project_owner}/{github_project_name}/source/images/functions_palette.png)
+![image](source/images/icon.png)
 
 {package_description}
 
-![image](https://github.com/{github_project_owner}/{github_project_name}/source/images/icon.png)
+![image](source/images/functions_palette.png)
 
 """
 
