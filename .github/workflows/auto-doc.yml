@@ -19,18 +19,18 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           # cache: 'pip'
           
-      - name: Checkout Repo
+      - name: Checkout Auto-Doc
         uses: actions/checkout@v4
         with:
           repository: 'vipm-io/OpenG-Toolkit'
           ref: 'main'
-          # path: '.github/workflows'
+          path: '.github/workflows'
           sparse-checkout: |
             .github/workflows/auto-doc.py
           sparse-checkout-cone-mode: false
