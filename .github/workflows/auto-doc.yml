@@ -35,9 +35,11 @@ jobs:
             .github/workflows/auto-doc.py
           sparse-checkout-cone-mode: false
 
-
       - name: Run auto-doc.py
-        run: python .github/workflows/auto-doc.py
+        run: |
+          wf=".github/workflows" && ad="auto-doc.py"
+          mv "$wf/$wf/$ad" $wf/
+          python $wf/$ad
 
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@master
