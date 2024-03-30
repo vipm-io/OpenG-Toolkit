@@ -1,6 +1,8 @@
 # OpenG Developer Guide (how to work on the code)
 This is a guide to help you work on OpenG libraries.
 
+See Also: [Upgrading Sources to LabVIEW 2020](library-upgrade-to-6.0.md)
+
 The goal is to help you get a copy of the code in a running state, so that you can start making and testing improvements to share back with the community.
 
 The setup process involves:
