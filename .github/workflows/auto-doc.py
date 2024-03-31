@@ -43,6 +43,7 @@ class ReadmeContext(BaseModel):
     package_description: str
     github_project_name: str
     github_project_owner: str
+    year: int = 2024
 
 
 README_STRUCTURE = """
@@ -93,6 +94,26 @@ README_HOW_TO_CONTRIBUTE_SECTION = """
 
 Take a look at the [Help Wanted](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) issues list. If it's your first contribution or you're not extremely familiar with this library, you might want to look at the [Good First Issues](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3Agood+first+issue) list.  If you see an issue that looks like one you can complete, add a comment to the issue stating you'd like to work on it, and a maintainer will follow up and "assigned" to you. You then create a branch and then submit your contribution in the form of a [Pull Requests](https://github.com/{github_project_owner}/{github_project_name}/pulls).
 
+"""
+
+
+BSD_LICENSE = """
+{package_display_name}
+
+Copyright (c) 2002-{year} Project Contributors (See CONTRIBUTORS.md)
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of the <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 
@@ -280,6 +301,65 @@ def main():
                 f"{ascii_warning} Found a LabVIEW version file '{file.name}' in project root. Deleting..."
             )
             file.unlink()
+
+
+    ##########################################################################################
+    # Check for source\user docs\License Agreement.txt
+    ##########################################################################################
+            
+    NEW_COPYRIGHT_LINE = f"Copyright 2002-{readme_ctx.year} Project Contributors (See CONTRIBUTORS.md)"
+            
+    old_license_agreement = project_folder / "source" / "user docs" / "License Agreement.txt"
+
+    if old_license_agreement.exists():
+        print(f"{ascii_warning} Found old license agreement file. Moving to new `./LICENSE` location...")
+        new_license = project_folder / "LICENSE"
+        old_license_agreement.rename(new_license)
+        print(f"{ascii_checkmark} Moved old license agreement file to new location: {new_license}")
+
+        # find the line that begins with "Copyright" and update it:
+        with open(new_license, "r") as file:
+            lines = file.readlines()
+            for i, line in enumerate(lines):
+                if line.startswith("Copyright"):
+                    print(f"{ascii_warning} Found old copyright line: {line.strip()}")
+                    print(f"{ascii_checkmark} Updating to new copyright line: {NEW_COPYRIGHT_LINE.strip()}")
+                    lines[i] = NEW_COPYRIGHT_LINE + "\n"
+                    break
+        with open(new_license, "w") as file:
+            file.writelines(lines)
+
+
+    ##########################################################################################
+    # Check for .gitignore file
+    ##########################################################################################
+    
+    GIT_IGNORE = """
+# Python Virtual Environment
+.venv/
+
+# LabVIEW Local Settings
+*.aliases
+*.lvlps
+
+# Dragon Meta Folder
+.dragon/
+
+# Temp Build Folder
+.source/
+
+# Built Package
+*.vip
+"""
+
+    gitignore = project_folder / ".gitignore"
+
+    if not gitignore.exists():
+        print(f"{ascii_warning} .gitignore file not found in project root. Creating one...")
+        with open(gitignore, "w") as file:
+            file.write(GIT_IGNORE)
+        print(f"{ascii_checkmark} .gitignore file created.")
+
 
     ##########################################################################################
     # Cleanup
