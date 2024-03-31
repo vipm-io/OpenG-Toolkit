@@ -30,6 +30,7 @@ Contributor Tasks
 
 Admin Tasks (to be done by Maintainer)
 - [ ] CI
+  - [ ] Enable GitHub Actions for repo
   - [ ] Add `.github/workflows/ci.yml` (copy from OpenG Variant Library) to project (this will help automate and enforce maintenance)
 - [ ] Release
   - [ ] Update .vipb file with release notes
