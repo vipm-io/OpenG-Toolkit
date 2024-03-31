@@ -35,10 +35,17 @@ jobs:
         shell: bash
         run: |
 
-          # read the LabVIEW version from the first line of .lvversion file
-          LV_VERSION="$(head -n 1 .lvversion)"
-          # convert to integer
-          LV_VERSION=` echo $LV_VERSION | sed 's/\..*//' `
+          # check if .lvversion file exists and use the workflow inputs labview-version if not
+          if [ -f .lvversion ]; then
+            # read the LabVIEW version from the first line of .lvversion file
+            LV_VERSION="$(head -n 1 .lvversion)"
+            # convert to integer
+            LV_VERSION=` echo $LV_VERSION | sed 's/\..*//' `
+          else
+            # use the workflow input labview-version
+            LV_VERSION=${{ github.event.inputs.labview-version }}
+          fi
+
           source .venv/bin/activate
 
           # print helpful info
