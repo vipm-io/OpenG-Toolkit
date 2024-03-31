@@ -406,6 +406,25 @@ def main():
     #     print(f"{ascii_checkmark} Updated .vipb file with new meta info.")
 
 
+    ################################################################################################
+    # Check if 'dev docs/ToDo.txt' is an empty file and delete it, if so
+    ################################################################################################
+    
+    dev_docs_folder = project_folder / "dev docs"
+    todo_file = dev_docs_folder / "ToDo.txt"
+    if todo_file.exists():
+        if not todo_file.read_text().strip():
+            print(f"{ascii_warning} Found empty 'ToDo.txt' file. Deleting...")
+            todo_file.unlink()
+            print(f"{ascii_checkmark} Deleted empty 'ToDo.txt' file.")
+
+    # check if dev_docs_folder is empty and delete it
+    if not list(dev_docs_folder.iterdir()):
+        print(f"{ascii_warning} Found empty 'dev docs' folder. Deleting...")
+        dev_docs_folder.rmdir()
+        print(f"{ascii_checkmark} Deleted empty 'dev docs' folder.")
+        
+
     ##########################################################################################
     # Cleanup
     ##########################################################################################
