@@ -361,49 +361,49 @@ def main():
         print(f"{ascii_checkmark} .gitignore file created.")
 
 
-    ##########################################################################################
-    # Update .vipb file meta info
-    ##########################################################################################
+    # ##########################################################################################
+    # # Update .vipb file meta info
+    # ##########################################################################################
     
-    vipb_file = project_folder / "source" / ".vipb"
+    # vipb_file = project_folder / "source" / ".vipb"
 
-    vipb_changed = False
-    if vipb_file.exists():
-        vipb_string = vipb_file.read_text()
-        vipb_dict = xmltodict.parse(vipb_string)
-        vipb_settings = vipb_dict["VI_Package_Builder_Settings"]
-        vipb_library_settings = vipb_settings["Library_General_Settings"]
-        vipb_advanced_settings = vipb_settings["Advanced_Settings"]
-        vipb_description = vipb_advanced_settings["Description"]
-        if vipb_description["Copyright"] != NEW_COPYRIGHT_LINE.strip():
-            vipb_description["Copyright"] = NEW_COPYRIGHT_LINE.strip()
-            vipb_changed = True
-        if vipb_description["Packager"] != "VIPM Community":
-            vipb_description["Packager"] = "VIPM Community"
-            vipb_changed = True
-        if vipb_description["URL"] != f"https://www.vipm.io/package/{package_name}":
-            vipb_description["URL"] = f"https://www.vipm.io/package/{package_name}"
-            vipb_changed = True
-        if vipb_library_settings["Company_Name"] != "VIPM Community":
-            vipb_library_settings["Company_Name"] = "VIPM Community"
-            vipb_changed = True
-        if vipb_library_settings["Library_License"] != "BSD-3-clause":
-            vipb_library_settings["Library_License"] = "BSD-3-clause"
-            vipb_changed = True
-        if vipb_library_settings["Package_LabVIEW_Version"] != LV_VERSION:
-            vipb_library_settings["Package_LabVIEW_Version"] = LV_VERSION
-            vipb_changed = True
-        if vipb_advanced_settings["License_Agreement_Filepath"] != "..\\LICENSE":
-            vipb_advanced_settings["License_Agreement_Filepath"] = "..\\LICENSE"
-            vipb_changed = True
+    # vipb_changed = False
+    # if vipb_file.exists():
+    #     vipb_string = vipb_file.read_text()
+    #     vipb_dict = xmltodict.parse(vipb_string)
+    #     vipb_settings = vipb_dict["VI_Package_Builder_Settings"]
+    #     vipb_library_settings = vipb_settings["Library_General_Settings"]
+    #     vipb_advanced_settings = vipb_settings["Advanced_Settings"]
+    #     vipb_description = vipb_advanced_settings["Description"]
+    #     if vipb_description["Copyright"] != NEW_COPYRIGHT_LINE.strip():
+    #         vipb_description["Copyright"] = NEW_COPYRIGHT_LINE.strip()
+    #         vipb_changed = True
+    #     if vipb_description["Packager"] != "VIPM Community":
+    #         vipb_description["Packager"] = "VIPM Community"
+    #         vipb_changed = True
+    #     if vipb_description["URL"] != f"https://www.vipm.io/package/{package_name}":
+    #         vipb_description["URL"] = f"https://www.vipm.io/package/{package_name}"
+    #         vipb_changed = True
+    #     if vipb_library_settings["Company_Name"] != "VIPM Community":
+    #         vipb_library_settings["Company_Name"] = "VIPM Community"
+    #         vipb_changed = True
+    #     if vipb_library_settings["Library_License"] != "BSD-3-clause":
+    #         vipb_library_settings["Library_License"] = "BSD-3-clause"
+    #         vipb_changed = True
+    #     if vipb_library_settings["Package_LabVIEW_Version"] != LV_VERSION:
+    #         vipb_library_settings["Package_LabVIEW_Version"] = LV_VERSION
+    #         vipb_changed = True
+    #     if vipb_advanced_settings["License_Agreement_Filepath"] != "..\\LICENSE":
+    #         vipb_advanced_settings["License_Agreement_Filepath"] = "..\\LICENSE"
+    #         vipb_changed = True
 
-    if vipb_changed:
-        with open(vipb_file, "w") as file:
-            vipb_string = xmltodict.unparse(vipb_dict, pretty=True)
-            # convert eols to windows style
-            vipb_string = vipb_string.replace("\n", "\r\n")
-            file.write(xmltodict.unparse(vipb_dict, pretty=True))
-        print(f"{ascii_checkmark} Updated .vipb file with new meta info.")
+    # if vipb_changed:
+    #     with open(vipb_file, "w") as file:
+    #         vipb_string = xmltodict.unparse(vipb_dict, pretty=True)
+    #         # convert eols to windows style
+    #         vipb_string = vipb_string.replace("\n", "\r\n")
+    #         file.write(xmltodict.unparse(vipb_dict, pretty=True))
+    #     print(f"{ascii_checkmark} Updated .vipb file with new meta info.")
 
 
     ##########################################################################################
