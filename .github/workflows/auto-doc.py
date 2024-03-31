@@ -419,11 +419,11 @@ def main():
             print(f"{ascii_checkmark} Deleted empty 'ToDo.txt' file.")
 
     # check if dev_docs_folder is empty and delete it
-    if not list(dev_docs_folder.iterdir()):
+    if dev_docs_folder.exists() and not list(dev_docs_folder.iterdir()):
         print(f"{ascii_warning} Found empty 'dev docs' folder. Deleting...")
         dev_docs_folder.rmdir()
         print(f"{ascii_checkmark} Deleted empty 'dev docs' folder.")
-        
+
 
     ##########################################################################################
     # Cleanup
