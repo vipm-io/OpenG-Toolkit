@@ -117,4 +117,41 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: "**Automated pull request**<br><br>Documentation has been updated automatically."
           title: auto-doc-${{github.run_number}}
+
+
+  caraya-tests:
+
+    runs-on:
+      - ubuntu-latest
+
+    container:
+      image: ghcr.io/vipm-io/actions-runner-labview:main
+      credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.github_token }}
+      
+    steps:
+      - uses: actions/checkout@v4    
+      
+      - name: Caraya Tests
+        shell: bash
+        run: |
+          echo "Applying VIPC Starting Display..."
+          source start_display
+          echo "Applying VIPC file..."
+          dragon vipm vipc-apply --lv-version 2024 ./source/.vipc
+          echo "Running unit tests..."
+          g-cli ./test.vi
           
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: caraya-test-report
+          path: ./report.xml
+
+      - name: Caraya Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          check_name: Caraya Test Report
+          report_paths: report.xml
