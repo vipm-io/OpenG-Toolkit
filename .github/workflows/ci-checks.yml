@@ -67,8 +67,6 @@ jobs:
   doc-checks:
 
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-
-    name: Documentation Checks
     
     runs-on: ubuntu-latest
 
@@ -139,7 +137,7 @@ jobs:
           echo "Applying VIPC Starting Display..."
           source start_display
           echo "Applying VIPC file..."
-          dragon vipm vipc-apply --lv-version 2024 ./source/.vipc
+          dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 300 ./source/.vipc
           echo "Running unit tests..."
           g-cli ./test.vi
           
