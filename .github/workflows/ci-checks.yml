@@ -136,6 +136,8 @@ jobs:
         run: |
           echo "Applying VIPC Starting Display..."
           source start_display
+          echo "Refreshing Package List..."
+          dragon refresh --vipm          
           echo "Applying VIPC file..."
           dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 300 ./source/.vipc
           echo "Running unit tests..."
