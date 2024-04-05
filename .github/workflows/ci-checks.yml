@@ -9,7 +9,7 @@ on:
         type: string
       ci-container:
         required: false
-        default: ghcr.io/vipm-io/actions-runner-labview:main
+        default: "${{ github.repository }}"
         type: string
 
 jobs:
