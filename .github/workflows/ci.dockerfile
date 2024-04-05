@@ -8,7 +8,7 @@ ARG VIPC_TIMEOUT 600
 
 COPY source/.vipc .vipc
 
-RUN source start_display && \
+RUN . start_display && \
     echo "Applying VIPC File..." && \
     dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 .vipc && \
     rm .vipc
