@@ -47,7 +47,7 @@ jobs:
             LV_VERSION=` echo $LV_VERSION | sed 's/\..*//' `
           else
             # use the workflow input labview-version
-            LV_VERSION=${{ github.event.inputs.labview-version }}
+            LV_VERSION=${{ inputs.labview-version }}
           fi
 
           source .venv/bin/activate
@@ -127,7 +127,7 @@ jobs:
       - ubuntu-latest
 
     container:
-      image: ${{ github.event.inputs.ci-container }}
+      image: ${{ inputs.ci-container }}
       credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.github_token }}
