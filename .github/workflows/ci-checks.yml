@@ -145,7 +145,7 @@ jobs:
           echo "Applying VIPC file..."
           dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 300 ./source/.vipc
           echo "Running unit tests..."
-          g-cli ./test.vi
+          g-cli --timeout 600000 ./test.vi
           
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
