@@ -7,6 +7,10 @@ on:
         required: false
         default: "20.0"
         type: string
+      ci-container:
+        required: false
+        default: ghcr.io/vipm-io/actions-runner-labview:main
+        type: string
 
 jobs:
 
@@ -123,7 +127,7 @@ jobs:
       - ubuntu-latest
 
     container:
-      image: ghcr.io/vipm-io/actions-runner-labview:main
+      image: ${{ github.event.inputs.ci-container }}
       credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.github_token }}
