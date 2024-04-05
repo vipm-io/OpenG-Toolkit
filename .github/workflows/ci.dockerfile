@@ -11,6 +11,6 @@ COPY source/*.vipc ./
 RUN echo "Starting Display..." && \
     . start_display && \
     echo "Applying VIPC File..." && \
-    dragon refresh --vipm
+    dragon refresh --vipm && \
     dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} *.vipc && \
     rm *.vipc
