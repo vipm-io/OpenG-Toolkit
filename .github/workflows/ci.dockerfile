@@ -12,5 +12,6 @@ RUN echo "Starting Display..." && \
     . start_display && \
     echo "Applying VIPC File..." && \
     dragon refresh --vipm && \
-    dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} *.vipc && \
+    echo "LABVIEW_VERSION LABVIEW_BITNESS: ${LABVIEW_VERSION} ${LABVIEW_BITNESS}", VIPC_TIMEOUT: ${VIPC_TIMEOUT}" && \
+    dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 *.vipc && \
     rm *.vipc
