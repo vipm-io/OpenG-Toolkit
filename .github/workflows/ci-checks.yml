@@ -143,7 +143,7 @@ jobs:
           echo "Refreshing Package List..."
           dragon refresh --vipm          
           echo "Applying VIPC file..."
-          dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 300 ./source/.vipc
+          dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 ./source/.vipc
           if [ -f "./build support/coverage.vi" ]; then
             echo "Calculating Test Coverage..."
             g-cli --timeout 600000 "./build support/coverage.vi"
