@@ -157,7 +157,7 @@ jobs:
           name: caraya-test-report
           path: |
             ./report.xml
-            ./coverage.json
+            ./codecov.json
 
       - name: Caraya Test Report
         uses: mikepenz/action-junit-report@v4
@@ -175,4 +175,4 @@ jobs:
           slug: ${{ github.repository }}
           verbose: true # optional (default = false)
           flags: unittests
-          files: coverage.json
+          files: codecov.json
