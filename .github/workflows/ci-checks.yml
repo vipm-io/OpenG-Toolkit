@@ -165,12 +165,14 @@ jobs:
         with:
           check_name: Caraya Test Report
           report_paths: report.xml
-  
-      - uses: codecov/codecov-action@v4
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
         with:
           # fail_ci_if_error: true # optional (default = false)
-          files: ./coverage.json
-          flags: unittests
           # name: codecov-umbrella # optional
-          token: ${{ secrets.CODECOV_TOKEN }} # required
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ${{ github.repository }}
           verbose: true # optional (default = false)
+          flags: unittests
+          files: coverage.json
