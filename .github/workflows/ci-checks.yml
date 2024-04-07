@@ -144,6 +144,10 @@ jobs:
           dragon refresh --vipm          
           echo "Applying VIPC file..."
           dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 300 ./source/.vipc
+          if [ -f "./build support/coverage.vi" ]; then
+            echo "Calculating Test Coverage..."
+            g-cli --timeout 600000 "./build support/coverage.vi"
+          fi
           echo "Running unit tests..."
           g-cli --timeout 600000 Caraya -- -s "tests" -x "report.xml" -v true -r true
           
