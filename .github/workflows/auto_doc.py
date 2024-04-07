@@ -5,9 +5,12 @@ from pathlib import Path
 import re
 from typing import Self
 from dataclasses import dataclass
+import logging
 
 import xmltodict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+
+logging.basicConfig(level=logging.INFO)
 
 LV_VERSION = "20.0"
 
@@ -22,7 +25,8 @@ ascii_checkmark = "  ✅"
 ascii_cross = "  ❌"
 ascii_warning = "  ❗"
 
-README_CONTRIBUTORS_SECTION = """
+README_CONTRIBUTORS_SECTION = \
+"""
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -34,7 +38,7 @@ README_CONTRIBUTORS_SECTION = """
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-"""
+""".lstrip()
 
 
 class ReadmeContext(BaseModel):
@@ -55,11 +59,10 @@ README_STRUCTURE = """
 
 ## Contributors
 
-"""
+""".lstrip()
 
 
 README_TITLE_SECTION = """
-
 # {package_display_name}
 
 [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=installs)](https://www.vipm.io/package/{package_name}/) [![Image](https://www.vipm.io/package/{package_name}/badge.svg?metric=stars)](https://www.vipm.io/package/{package_name}/)
@@ -72,32 +75,35 @@ README_TITLE_SECTION = """
 
 ![image](source/images/functions_palette.png)
 
-"""
+""".lstrip()
 
 
 def render_template(ctx: BaseModel, template: str):
-    rendered = template.format(**ctx.dict()).strip()
-    return "\n" + rendered + "\n"
+    rendered = template.format(**ctx.model_dump())
+    return rendered
 
 
-README_INSTALLATION_SECTION = """
-
+README_INSTALLATION_SECTION = \
+"""
 ## Installation
 
 [Install the {package_display_name} with VIPM](https://www.vipm.io/package/{package_name}/) (a.k.a {package_name})
 
+""".lstrip()
+
+README_HOW_TO_CONTRIBUTE_SECTION = \
 """
-
-README_HOW_TO_CONTRIBUTE_SECTION = """
-
 ## How to Contribute
 
 Take a look at the [Help Wanted](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) issues list. If it's your first contribution or you're not extremely familiar with this library, you might want to look at the [Good First Issues](https://github.com/{github_project_owner}/{github_project_name}/issues?q=is%3Aissue+is%3Aopen+label%3Agood+first+issue) list.  If you see an issue that looks like one you can complete, add a comment to the issue stating you'd like to work on it, and a maintainer will follow up and "assigned" to you. You then create a branch and then submit your contribution in the form of a [Pull Requests](https://github.com/{github_project_owner}/{github_project_name}/pulls).
 
+Also, please see the [OpenG Developer Guide](https://github.com/vipm-io/OpenG-Toolkit/blob/main/docs/developer-guide.md) for information on how to obtain and start contributing to the code.
+
+""".lstrip()
+
+
+BSD_LICENSE = \
 """
-
-
-BSD_LICENSE = """
 {package_display_name}
 
 Copyright (c) 2002-{year} Project Contributors (See CONTRIBUTORS.md)
@@ -114,8 +120,113 @@ modification, are permitted provided that the following conditions are met:
   * Neither the name of the <organization> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
 
+""".lstrip()
+
+##########################################################################################
+# Markdown Utils
+##########################################################################################
+
+def get_heading_regex(heading_title: str, level: int = None) -> str:
+    if level is None:
+        regex = fr"^(#+)\s+{heading_title.strip()}"
+    else:
+        regex = fr"^{'#' * level}\s+{heading_title.strip()}"
+    return regex
+
+def find_markdown_heading(markdown_lines: list[str], heading: str, level:int = None, start_line:int=0) -> int | None:
+    """Finds the line number of a markdown heading"""
+    heading_regex = get_heading_regex(heading, level)
+    pattern = re.compile(heading_regex)
+    for i, line in enumerate(markdown_lines[start_line:]):
+        if re.match(pattern, line):
+            return start_line + i
+    return None
+
+def get_heading_level(heading_line: str) -> int:
+    return len(re.match(r"^(#+)\s+", heading_line).group(1))
+
+def get_heading_title(heading_line: str) -> str:
+    return re.match(r"^(#+)\s+(.+)", heading_line).group(2).strip()
+
+def find_markdown_section(markdown_lines: list[str], section_title: str, level:int = None, start_line:int=0):
+    """Finds the start and end lines of a markdown section"""
+    heading_regex = get_heading_regex(section_title, level)
+    pattern = re.compile(heading_regex)
+    logging.info(f"heading_regex: `{heading_regex}`")
+    end_line = None
+    for i, line in enumerate(markdown_lines[start_line:]):
+        if re.match(pattern, line):
+            start_line += i
+            break
+    if start_line is None:
+        return None, None
+    level = get_heading_level(markdown_lines[start_line])
+    for i, line in enumerate(markdown_lines[start_line+1:]):
+        # check if the line is a heading and get the level
+        # if the level is less than or equal to the current level, then we've reached the end of the section\
+        pattern = re.compile(r"^(#+)\s+")
+        match = re.match(pattern, line)
+        logging.info(f"line: {line}, match: {match}")
+        if match and match.group(1) and len(match.group(1)) <= level:
+            end_line = start_line + i
+            break
+    # if we didn't find an end line, then the section extends to the end of the file
+    if end_line is None:
+        end_line = len(markdown_lines) - 1
+    return start_line, end_line
+
+def lines_to_string(lines: list[str]) -> str:
+    return "\n".join([line.rstrip() for line in lines])
+
+def string_to_lines(string: str) -> list[str]:
+    return string.splitlines(keepends=True)
+
+def replace_markdown_section_content(markdown_string: str, section_title: str, new_content: str, replace_heading=False) -> tuple[str, bool]:
+    logging.info(f"Replacing markdown section content for section: {section_title}")
+    markdown_lines = string_to_lines(markdown_string)
+    start_line, end_line = find_markdown_section(markdown_lines, section_title)
+    if start_line is None:
+        return lines_to_string(markdown_lines), False
+    if not replace_heading:
+        # let's just replace the content
+        start_line += 1
+    new_markdown_lines = markdown_lines[:start_line-1] + string_to_lines(new_content) + markdown_lines[end_line+1:]
+    return lines_to_string(new_markdown_lines), True
+
+
+def add_markdown_section(markdown_string: str, new_content: str, after_heading: str = None, at_begining=False) -> tuple[str, bool]:
+    assert not (after_heading and at_begining), "Can't specify both `after_heading` and `at_begining`"
+    
+    if at_begining:
+        return new_content + markdown_string, True
+    
+    markdown_lines = string_to_lines(markdown_string)
+    if after_heading:
+        start_line = find_markdown_heading(markdown_lines, after_heading)
+        if start_line is None:
+            start_line = len(markdown_lines) - 1
+    else:
+        start_line = len(markdown_lines) - 1
+    
+    new_markdown_lines = markdown_lines[:start_line+1] + string_to_lines(new_content) + markdown_lines[start_line+1:]
+    return "\n".join(new_markdown_lines), True
+
+
+def add_or_replace_markdown_section_content(markdown_string: str, section_title: str, new_content: str, replace_heading=False, after_heading:str = None,
+                                            at_beginning = False) -> str:
+    new_markdown, changed = replace_markdown_section_content(markdown_string, section_title, new_content, replace_heading)
+    if changed:
+        logging.info("Replaced content")
+    if not changed:
+        logging.info("Adding new content")
+        new_markdown, changed = add_markdown_section(markdown_string, new_content, after_heading=after_heading, at_beginning=at_beginning)
+    return new_markdown
+
+
+##########################################################################################
+# Data Classes
+##########################################################################################
 
 @dataclass
 class OpenGProject:
@@ -178,22 +289,22 @@ def main():
     # Setup
     ##########################################################################################
 
-    print("\nChecking project docs...\n")
+    logging.info("\nChecking project docs...\n")
 
     ##########################################################################################
     # Reading git origin url
     ##########################################################################################
     git_origin_url = os.popen("git config --get remote.origin.url").read().strip()
-    print(f"{ascii_checkmark} git_origin_url: {git_origin_url}")
+    logging.info(f"{ascii_checkmark} git_origin_url: {git_origin_url}")
 
     # Checking if project is hosted on GitHub...
     try:
         gh = GitHubProject.from_url(git_origin_url)
-        print(
+        logging.info(
             f"{ascii_checkmark} GitHub project found: {gh.project_owner}/{gh.project_name}"
         )
     except ValueError:
-        print(f"c{git_origin_url} does not appear to be a github project. Exiting...")
+        logging.info(f"c{git_origin_url} does not appear to be a github project. Exiting...")
         return
 
     ##########################################################################################
@@ -205,10 +316,10 @@ def main():
 
     vipb_dict = xmltodict.parse(vipb_string)
 
-    # print(json.dumps(vipb_dict, indent=4))
+    # logging.info(json.dumps(vipb_dict, indent=4))
 
     if not vipb_file.exists():
-        print(f"{ascii_cross} .vipb file not found in project source folder")
+        logging.info(f"{ascii_cross} .vipb file not found in project source folder")
         raise FileNotFoundError(".vipb file not found in project source folder")
 
     # sub-dictionaries
@@ -222,9 +333,9 @@ def main():
     package_display_name = vipb_library_settings["Product_Name"]
     package_description = vipb_description["Description"]
 
-    print(f"{ascii_checkmark} Package name: {package_name}")
-    print(f"{ascii_checkmark} Display name: {package_display_name}")
-    print(f"{ascii_checkmark} Description: {package_description}")
+    logging.info(f"{ascii_checkmark} Package name: {package_name}")
+    logging.info(f"{ascii_checkmark} Display name: {package_display_name}")
+    logging.info(f"{ascii_checkmark} Description: {package_description}")
 
     readme_ctx = ReadmeContext(
         package_display_name=package_display_name,
@@ -238,9 +349,9 @@ def main():
     # Checking for .all-contributorsrc file
     ##########################################################################################
     if all_contributorsrc.exists():
-        print(f"{ascii_checkmark} .all-contributorsrc file found in project root.")
+        logging.info(f"{ascii_checkmark} .all-contributorsrc file found in project root.")
     else:
-        print(
+        logging.info(
             f"{ascii_warning} .all-contributorsrc file not found in project root. Creating one..."
         )
         create_all_contributorsrc(file_path=all_contributorsrc, gh=gh)
@@ -250,10 +361,10 @@ def main():
     ##########################################################################################
     readme = project_folder / "README.md"
     if not readme.exists():
-        print(f"{ascii_warning} README.md not found in project root. Creating one...")
+        logging.info(f"{ascii_warning} README.md not found in project root. Creating one...")
         # write an empty file
         with open(readme, "w") as file:
-            file.write(render_template(readme_ctx, README_TITLE_SECTION).lstrip())
+            file.write(render_template(readme_ctx, README_TITLE_SECTION))
             file.write(render_template(readme_ctx, README_INSTALLATION_SECTION))
             file.write(render_template(readme_ctx, README_HOW_TO_CONTRIBUTE_SECTION))
 
@@ -262,20 +373,34 @@ def main():
     ##########################################################################################
     readme = project_folder / "README.md"
     if not readme.exists():
-        print(f"{ascii_warning} README.md not found in project root")
+        logging.info(f"{ascii_warning} README.md not found in project root")
         return
     with open(readme, "r") as file:
         readme_content = file.read()
         has_contributors_section = "## Contributors" in readme_content
         if has_contributors_section:
-            print(f"{ascii_checkmark} README.md has a `## Contributors` section")
+            logging.info(f"{ascii_checkmark} README.md has a `## Contributors` section")
         else:
-            print(
+            logging.info(
                 f"{ascii_warning} README.md does not have a `## Contributors` section. Adding one..."
             )
 
             with open(readme, "a") as file:
-                file.write(README_CONTRIBUTORS_SECTION)
+                file.write(render_template(readme_ctx, README_CONTRIBUTORS_SECTION))
+
+    ##########################################################################################
+    # Update `## How to Contribute` section
+    ##########################################################################################
+    with open(readme, "r") as file:
+        readme_content = file.read()
+        new_readme_content = add_or_replace_markdown_section_content(
+            markdown_string=readme_content,
+            section_title="How to Contribute",
+            new_content=render_template(readme_ctx, README_HOW_TO_CONTRIBUTE_SECTION),
+        )
+        if new_readme_content != readme_content:
+            with open(readme, "w") as file:
+                file.write(new_readme_content)
 
     ##########################################################################################
     # Check for .lvversion file
@@ -283,12 +408,12 @@ def main():
 
     dot_lvversion = project_folder / ".lvversion"
     if not dot_lvversion.exists():
-        print(
+        logging.info(
             f"{ascii_warning} .lvversion file not found in project root. Creating one..."
         )
         with open(dot_lvversion, "w") as file:
             file.write(LV_VERSION)
-        print(f"{ascii_checkmark} .lvversion file created and set to '{LV_VERSION}'.")
+        logging.info(f"{ascii_checkmark} .lvversion file created and set to '{LV_VERSION}'.")
 
     # also check for presense of a file named "LabVIEW 2009" (or similar) in the project root
     # if it exists, then we'll delete it
@@ -297,7 +422,7 @@ def main():
     re.compile(labview_version_file_pattern)
     for file in project_folder.iterdir():
         if re.match(labview_version_file_pattern, file.name):
-            print(
+            logging.info(
                 f"{ascii_warning} Found a LabVIEW version file '{file.name}' in project root. Deleting..."
             )
             file.unlink()
@@ -312,18 +437,18 @@ def main():
     old_license_agreement = project_folder / "source" / "user docs" / "License Agreement.txt"
 
     if old_license_agreement.exists():
-        print(f"{ascii_warning} Found old license agreement file. Moving to new `./LICENSE` location...")
+        logging.info(f"{ascii_warning} Found old license agreement file. Moving to new `./LICENSE` location...")
         new_license = project_folder / "LICENSE"
         old_license_agreement.rename(new_license)
-        print(f"{ascii_checkmark} Moved old license agreement file to new location: {new_license}")
+        logging.info(f"{ascii_checkmark} Moved old license agreement file to new location: {new_license}")
 
         # find the line that begins with "Copyright" and update it:
         with open(new_license, "r") as file:
             lines = file.readlines()
             for i, line in enumerate(lines):
                 if line.startswith("Copyright"):
-                    print(f"{ascii_warning} Found old copyright line: {line.strip()}")
-                    print(f"{ascii_checkmark} Updating to new copyright line: {NEW_COPYRIGHT_LINE.strip()}")
+                    logging.info(f"{ascii_warning} Found old copyright line: {line.strip()}")
+                    logging.info(f"{ascii_checkmark} Updating to new copyright line: {NEW_COPYRIGHT_LINE.strip()}")
                     lines[i] = NEW_COPYRIGHT_LINE + "\n"
                     break
         with open(new_license, "w") as file:
@@ -334,7 +459,8 @@ def main():
     # Check for .gitignore file
     ##########################################################################################
     
-    GIT_IGNORE = """
+    GIT_IGNORE = \
+"""
 # Python Virtual Environment
 .venv/
 
@@ -350,15 +476,15 @@ def main():
 
 # Built Package
 *.vip
-"""
+""".lstrip()
 
     gitignore = project_folder / ".gitignore"
 
     if not gitignore.exists():
-        print(f"{ascii_warning} .gitignore file not found in project root. Creating one...")
+        logging.info(f"{ascii_warning} .gitignore file not found in project root. Creating one...")
         with open(gitignore, "w") as file:
             file.write(GIT_IGNORE)
-        print(f"{ascii_checkmark} .gitignore file created.")
+        logging.info(f"{ascii_checkmark} .gitignore file created.")
 
 
     # ##########################################################################################
@@ -403,7 +529,7 @@ def main():
     #         # convert eols to windows style
     #         vipb_string = vipb_string.replace("\n", "\r\n")
     #         file.write(xmltodict.unparse(vipb_dict, pretty=True))
-    #     print(f"{ascii_checkmark} Updated .vipb file with new meta info.")
+    #     logging.info(f"{ascii_checkmark} Updated .vipb file with new meta info.")
 
 
     ################################################################################################
@@ -414,22 +540,22 @@ def main():
     todo_file = dev_docs_folder / "ToDo.txt"
     if todo_file.exists():
         if not todo_file.read_text().strip():
-            print(f"{ascii_warning} Found empty 'ToDo.txt' file. Deleting...")
+            logging.info(f"{ascii_warning} Found empty 'ToDo.txt' file. Deleting...")
             todo_file.unlink()
-            print(f"{ascii_checkmark} Deleted empty 'ToDo.txt' file.")
+            logging.info(f"{ascii_checkmark} Deleted empty 'ToDo.txt' file.")
 
     # check if dev_docs_folder is empty and delete it
     if dev_docs_folder.exists() and not list(dev_docs_folder.iterdir()):
-        print(f"{ascii_warning} Found empty 'dev docs' folder. Deleting...")
+        logging.info(f"{ascii_warning} Found empty 'dev docs' folder. Deleting...")
         dev_docs_folder.rmdir()
-        print(f"{ascii_checkmark} Deleted empty 'dev docs' folder.")
+        logging.info(f"{ascii_checkmark} Deleted empty 'dev docs' folder.")
 
 
     ##########################################################################################
     # Cleanup
     ##########################################################################################
 
-    print("\nProject docs check complete!")
+    logging.info("\nProject docs check complete!")
 
 
 if __name__ == "__main__":

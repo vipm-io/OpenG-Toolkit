@@ -75,9 +75,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AUTODOC_PY: .github/workflows/auto-doc.py
+      AUTODOC_PY: .github/workflows/auto_doc.py
       AUTODOC_REQUIREMENTS: "xmltodict pydantic"
-      AUTODOC_DIR: .auto-doc
+      AUTODOC_DIR: .auto_doc
 
     steps:
 
@@ -99,7 +99,7 @@ jobs:
             ${{env.AUTODOC_PY}}
           sparse-checkout-cone-mode: false
 
-      - name: Run auto-doc.py
+      - name: Run auto_doc.py
         run: |
           python -m pip install ${{env.AUTODOC_REQUIREMENTS}}
           mv "${AUTODOC_DIR}/${AUTODOC_PY}" $AUTODOC_PY
