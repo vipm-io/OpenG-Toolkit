@@ -166,6 +166,11 @@ jobs:
           check_name: Caraya Test Report
           report_paths: report.xml
 
+      - run: |
+          # these files mess up the codecov report uploader, so remove them
+          rm -f report.xml
+          rm -f "build support/coverage.vi"
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
@@ -175,4 +180,4 @@ jobs:
           slug: ${{ github.repository }}
           verbose: true # optional (default = false)
           flags: unittests
-          files: codecov.json
+          files: "./codecov.json"
