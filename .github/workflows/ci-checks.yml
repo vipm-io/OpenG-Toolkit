@@ -9,7 +9,7 @@ on:
         type: string
       ci-container:
         required: false
-        default: "ghcr.io/${{ github.repository }}"
+        default: "ghcr.io/${{ github.repository }}:main"
         type: string
 
 jobs:
