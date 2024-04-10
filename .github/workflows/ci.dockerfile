@@ -13,9 +13,11 @@ COPY "source/.vipc" "build*support/dev.vipc?" ./
 RUN . start_display && \
     echo "Refreshing Package List..." && \
     dragon refresh --vipm && \
-    echo "Applying VIPC (Dev Deps) File..." && \
-    dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 dev.vipc && \
-    rm dev.vipc && \
+    if [ -f dev.vipc ]; then \
+        echo "Applying VIPC (Dev Deps) File..." && \
+        dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 dev.vipc && \
+        rm dev.vipc; \
+    fi && \
     echo "Applying VIPC File (Library Deps)..." && \
     dragon vipm apply-vipc --labview-version 2024 --labview-bitness 64 --timeout 600 .vipc && \
     rm .vipc
