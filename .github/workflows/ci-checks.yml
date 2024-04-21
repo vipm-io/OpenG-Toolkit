@@ -116,6 +116,8 @@ jobs:
       - name: Create pull request
         uses: devops-infra/action-pull-request@master
         with:
+          source_branch: auto-doc-${{github.run_number}}
+          target_branch: ${{ github.ref_name }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: "**Automated pull request**<br><br>Documentation has been updated automatically."
           title: auto-doc-${{github.run_number}}
