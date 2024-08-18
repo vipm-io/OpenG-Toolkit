@@ -5,12 +5,12 @@ FROM ghcr.io/vipm-io/actions-runner-labview:main
 ARG LABVIEW_VERSION 2024
 ARG LABVIEW_BITNESS 64
 ARG VIPC_TIMEOUT 600
-ARG SOURCE_VIPC source/.vipc
+ARG SOURCE_VIPC source/*.vipc
 ARG DEV_VIPC **/dev.vipc
 
 # note that files after the first COPY are optional, which is nice (since might not have a dev.vipc)
 # also note that dockerfile doesn't do whitespace characters, which is why we have a * in the COPY command
-COPY "${SOURCE_VIPC}" "${DEV_VIPC}" ./ || true
+COPY '${SOURCE_VIPC}' '${DEV_VIPC}' ./ || true
 
 # the script below will apply VIPC files, if they are found.
 RUN if [ -f $(basename ${DEV_VIPC}) ] || [ -f $(basename ${SOURCE_VIPC}) ]; then \
