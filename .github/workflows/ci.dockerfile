@@ -19,7 +19,7 @@ RUN if [ -f $(basename ${DEV_VIPC}) ] || [ -f $(basename ${SOURCE_VIPC}) ]; then
         if [ -f $(basename ${DEV_VIPC}) ]; then \
             echo "Applying VIPC (Dev Deps)..." && \
             dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} $(basename ${DEV_VIPC}) && \
-            rm $(basename ${DEV_VIPC); \
+            rm $(basename ${DEV_VIPC}); \
         fi && \
         if [ -f $(basename ${SOURCE_VIPC}) ]; then \
             echo "Applying VIPC (Library Deps)..." && \
