@@ -22,11 +22,11 @@ on:
                 type: string
             source_vipc:
                 required: false
-                default: "600"
+                default: "source/.vipc"
                 type: string
             dev_vipc:
                 required: false
-                default: "600"
+                default: "**/dev.vipc"
                 type: string
 
 env:
