@@ -9,10 +9,13 @@ ARG SOURCE_VIPC source/.vipc
 ARG DEV_VIPC **/dev.vipc
 
 # note that files after the first COPY are optional, which is nice (since might not have a dev.vipc)
+# we'll copy the README.md since all repos will have one :)  that's a fun little work-around, right?
 # also note that dockerfile doesn't do whitespace characters, which is why we have a * in the COPY command
-COPY "${SOURCE_VIPC}" "${DEV_VIPC}" ./
+COPY "README.md" "${SOURCE_VIPC}" "${DEV_VIPC}" ./
 
-RUN if [ -f $(basename ${DEV_VIPC}) ] || [ -f $(basename ${SOURCE_VIPC}) ]; then \
+# the script below will apply VIPC files, if they are found.
+RUN rm "README.md" && \
+    if [ -f $(basename ${DEV_VIPC}) ] || [ -f $(basename ${SOURCE_VIPC}) ]; then \
         . start_display && \
         echo "Refreshing Package List..." && \
         dragon refresh --vipm && \
