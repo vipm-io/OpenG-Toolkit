@@ -10,7 +10,23 @@ on:
         inputs:
             labview-version:
                 required: false
-                default: "20.0"
+                default: "2020"
+                type: string
+            labview-bitness:
+                required: false
+                default: "64"
+                type: string
+            vipc_timeout_ms:
+                required: false
+                default: "600"
+                type: string
+            source_vipc:
+                required: false
+                default: "600"
+                type: string
+            dev_vipc:
+                required: false
+                default: "600"
                 type: string
 
 env:
@@ -95,3 +111,8 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILDKIT_PROGRESS=plain
+            LABVIEW_VERSION="${{ inputs.labview-version }}"
+            LABVIEW_BITNESS="${{ inputs.labview-bitness }}"
+            VIPC_TIMEOUT="${{ inputs.vipc_timeout_ms }}"
+            SOURCE_VIPC="${{ inputs.source_vipc }}"
+            DEV_VIPC="${{ inputs.dev_vipc }}"
