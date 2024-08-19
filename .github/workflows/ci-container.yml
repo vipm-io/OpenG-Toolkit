@@ -10,7 +10,7 @@ on:
         inputs:
             labview-version:
                 required: false
-                default: 2020
+                default: 2024
                 type: string
             labview-bitness:
                 required: false
