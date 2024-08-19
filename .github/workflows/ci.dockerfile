@@ -5,27 +5,27 @@ FROM ghcr.io/vipm-io/actions-runner-labview:main
 ARG LABVIEW_VERSION 2024
 ARG LABVIEW_BITNESS 64
 ARG VIPC_TIMEOUT 600
-ARG SOURCE_VIPC ./source/*.vipc
-ARG DEV_VIPC ./**/dev.vipc
+ARG SOURCE_VIPC source/.vipc
+ARG DEV_VIPC dev.vipc
 
 # note that files after the first COPY are optional, which is nice (since might not have a dev.vipc)
 # also note that dockerfile doesn't do whitespace characters, which is why we have a * in the COPY command
-COPY ${SOURCE_VIPC} ./ || true
-COPY ${DEV_VIPC} ./ || true
+COPY ${SOURCE_VIPC}* ./source.vipc
+COPY ${DEV_VIPC}* ./dev.vipc
 
 # the script below will apply VIPC files, if they are found.
-RUN if [ -f $(basename ${DEV_VIPC}) ] || [ -f $(basename ${SOURCE_VIPC}) ]; then \
+RUN if [ -f dev.vipc ] || [ -f source.vipc ]; then \
         . start_display && \
         echo "Refreshing Package List..." && \
         dragon refresh --vipm && \
-        if [ -f $(basename ${DEV_VIPC}) ]; then \
+        if [ -f dev.vipc ]; then \
             echo "Applying VIPC (Dev Deps)..." && \
-            dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} $(basename ${DEV_VIPC}) && \
-            rm $(basename ${DEV_VIPC}); \
+            dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} dev.vipc && \
+            rm dev.vipc; \
         fi && \
-        if [ -f $(basename ${SOURCE_VIPC}) ]; then \
+        if [ -f source.vipc ]; then \
             echo "Applying VIPC (Library Deps)..." && \
-            dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} $(basename ${SOURCE_VIPC}) && \
-            rm $(basename ${SOURCE_VIPC}); \
+            dragon vipm apply-vipc --labview-version ${LABVIEW_VERSION} --labview-bitness ${LABVIEW_BITNESS} --timeout ${VIPC_TIMEOUT} source.vipc && \
+            rm source.vipc; \
         fi; \
     fi
