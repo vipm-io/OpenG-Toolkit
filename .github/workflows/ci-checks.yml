@@ -141,7 +141,7 @@ jobs:
         shell: bash
         run: |
           echo "Applying VIPC Starting Display..."
-          source start_display ${{ secrets.NGROK_TOKEN }}
+          start_display ${{ secrets.NGROK_TOKEN }}
           echo "Refreshing Package List..."
           dragon refresh --vipm          
           echo "Applying VIPC file..."
