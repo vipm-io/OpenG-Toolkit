@@ -7,6 +7,7 @@ ARG LABVIEW_BITNESS 64
 ARG VIPC_TIMEOUT 600
 ARG SOURCE_VIPC source/.vipc
 ARG DEV_VIPC dev.vipc
+ARG GITHUB_REPOSITORY
 
 # note that files after the first COPY are optional, which is nice (since might not have a dev.vipc)
 # also note that dockerfile doesn't do whitespace characters, which is why we have a * in the COPY command
@@ -15,7 +16,7 @@ COPY ${DEV_VIPC}* ./dev.vipc
 
 # the script below will apply VIPC files, if they are found.
 RUN if [ -f dev.vipc ] || [ -f source.vipc ]; then \
-        start_display && \
+        GITHUB_REPOSITORY=${GITHUB_REPOSITORY} start_display && \
         echo "Refreshing Package List..." && \
         dragon refresh --vipm && \
         if [ -f dev.vipc ]; then \

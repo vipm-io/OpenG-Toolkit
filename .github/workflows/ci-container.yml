@@ -116,3 +116,4 @@ jobs:
             VIPC_TIMEOUT=${{ inputs.vipc_timeout_ms }}
             SOURCE_VIPC=${{ inputs.source_vipc }}
             DEV_VIPC=${{ inputs.dev_vipc }}
+            GITHUB_REPOSITORY=${{ github.repository }}
