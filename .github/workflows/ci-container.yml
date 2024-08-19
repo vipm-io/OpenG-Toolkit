@@ -10,23 +10,23 @@ on:
         inputs:
             labview-version:
                 required: false
-                default: "2020"
+                default: 2020
                 type: string
             labview-bitness:
                 required: false
-                default: "64"
+                default: 64
                 type: string
             vipc_timeout_ms:
                 required: false
-                default: "600"
+                default: 600
                 type: string
             source_vipc:
                 required: false
-                default: "source/.vipc"
+                default: source/.vipc
                 type: string
             dev_vipc:
                 required: false
-                default: "dev.vipc"
+                default: dev.vipc
                 type: string
 
 env:
