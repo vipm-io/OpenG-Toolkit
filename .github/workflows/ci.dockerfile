@@ -15,7 +15,7 @@ COPY ${DEV_VIPC}* ./dev.vipc
 
 # the script below will apply VIPC files, if they are found.
 RUN if [ -f dev.vipc ] || [ -f source.vipc ]; then \
-        . start_display && \
+        start_display && \
         echo "Refreshing Package List..." && \
         dragon refresh --vipm && \
         if [ -f dev.vipc ]; then \
