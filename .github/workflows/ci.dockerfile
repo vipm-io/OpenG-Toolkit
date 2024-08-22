@@ -16,7 +16,7 @@ COPY ${DEV_VIPC}* ./dev.vipc
 
 # the script below will apply VIPC files, if they are found.
 RUN if [ -f dev.vipc ] || [ -f source.vipc ]; then \
-        GITHUB_REPOSITORY=${GITHUB_REPOSITORY} start_display && \
+        GITHUB_REPOSITORY=${GITHUB_REPOSITORY} init_labview && \
         echo "Refreshing Package List..." && \
         dragon refresh --vipm && \
         if [ -f dev.vipc ]; then \
