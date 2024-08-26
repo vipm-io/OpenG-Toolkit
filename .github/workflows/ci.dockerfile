@@ -2,7 +2,7 @@
 
 ARG LABVIEW_VERSION 2024
 ARG LABVIEW_BITNESS 64
-FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}:dev
+FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}-linux:dev
 
 ARG VIPC_TIMEOUT 600
 ARG SOURCE_VIPC source/.vipc
