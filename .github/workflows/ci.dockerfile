@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG LABVIEW_VERSION 2024.3
+ARG LABVIEW_VERSION 2024
 ARG LABVIEW_BITNESS 64
 FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}:dev
 
