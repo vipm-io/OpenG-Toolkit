@@ -110,10 +110,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILDKIT_PROGRESS=plain
-            LABVIEW_VERSION=${{ inputs.labview-version }}
-            LABVIEW_BITNESS=${{ inputs.labview-bitness }}
-            VIPC_TIMEOUT=${{ inputs.vipc_timeout_ms }}
-            SOURCE_VIPC=${{ inputs.source_vipc }}
-            DEV_VIPC=${{ inputs.dev_vipc }}
-            GITHUB_REPOSITORY=${{ github.repository }}
+            "BUILDKIT_PROGRESS=plain"
+            "LABVIEW_VERSION=${{ inputs.labview-version }}"
+            "LABVIEW_BITNESS=${{ inputs.labview-bitness }}"
+            "VIPC_TIMEOUT=${{ inputs.vipc_timeout_ms }}"
+            "SOURCE_VIPC=${{ inputs.source_vipc }}"
+            "DEV_VIPC=${{ inputs.dev_vipc }}"
+            "GITHUB_REPOSITORY=${{ github.repository }}"
