@@ -3,6 +3,8 @@
 ARG LABVIEW_VERSION=2024
 FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}-linux:dev
 
+# IMPORTANT - Redeclare args used before FROM or they will be unset (yet, no redeclare of defaults needed)
+ARG LABVIEW_VERSION
 ARG LABVIEW_BITNESS=64
 ARG VIPC_TIMEOUT=600
 ARG SOURCE_VIPC=source/.vipc*
