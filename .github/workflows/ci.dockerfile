@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG LABVIEW_VERSION=2024
-FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}-linux:dev
+FROM ghcr.io/vipm-io/actions-runner-labview-${LABVIEW_VERSION}-linux:main
 
 # IMPORTANT - Redeclare args used before FROM or they will be unset (yet, no redeclare of defaults needed)
 ARG LABVIEW_VERSION
